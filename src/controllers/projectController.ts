@@ -9,14 +9,14 @@ const getProjectByDate = async (req: Request, res: Response) => {
 	return res.json(result);
 }
 
-//const postProject = async (req: Request, res: Response) => {
-//	const handOver = req.body;
-//
-//	const result = await projectModel.postProject(handOver);
-//
-//	return res.json(result);
-//}
-//
+const postProject = async (req: Request, res: Response) => {
+	const proposedData = req.body;
+
+	const result = await projectModel.postProject(proposedData);
+
+	return res.json(result);
+}
+
 //const updateProject = async (req: Request, res: Response) => {
 //	const handOver = req.body;
 //
@@ -27,7 +27,7 @@ const getProjectByDate = async (req: Request, res: Response) => {
 
 export = {
 	getProjectByDate: getProjectByDate,
-//	postProject: postProject,
+	postProject: postProject,
 //	updateProject: updateProject,
 }
 
