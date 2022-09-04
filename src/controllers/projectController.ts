@@ -17,17 +17,16 @@ const postProject = async (req: Request, res: Response) => {
 	return res.json(result);
 }
 
-//const updateProject = async (req: Request, res: Response) => {
-//	const handOver = req.body;
-//
-//	const result = await projectModel.updateProject(handOver);
-//
-//	return res.json(result);
-//}
+const updateLikeCount = async (req: Request, res: Response) => {
+	// req.body is object : {theDay: string, session: number}
+	const result = await projectModel.updateLikeCount(req.body);
+
+	return res.json(result);
+}
 
 export = {
 	getProjectByDate: getProjectByDate,
 	postProject: postProject,
-//	updateProject: updateProject,
+	updateLikeCount: updateLikeCount,
 }
 

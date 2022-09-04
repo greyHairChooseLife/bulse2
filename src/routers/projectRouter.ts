@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.get('', projectController.getProjectByDate);
 router.post('', projectController.postProject);
+router.put('/likeCount', projectController.updateLikeCount);
 //router.put('', projectController.updateProject);
 //router.delete('', projectController.deleteProject);
 
