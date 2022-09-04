@@ -19,9 +19,15 @@ const postProject = async (req: Request, res: Response) => {
 
 const updateLikeCount = async (req: Request, res: Response) => {
 	// req.body is object : {theDay: string, session: number}
+
+	const affected = {
+		ip: req.ip,
+		item: [req.body.theDay, req.body.session]
+	};
+
 	const result = await projectModel.updateLikeCount(req.body);
 
-	return res.json(result);
+	return res.json({updateResult: result, affected: affected});
 }
 
 export = {
