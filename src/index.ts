@@ -5,6 +5,7 @@ import cors from 'cors';
 import methodOverride from 'method-override';
 
 import projectRouter from './routers/projectRouter';
+import reservationRouter from './routers/reservationRouter';
 //import adminRouter from './routers/adminRouter';
 
 const app = express();
@@ -26,6 +27,7 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.use('/project', projectRouter);
+app.use('/reservation', reservationRouter);
 
 app.listen(process.env.PORT, () => {
 	console.log(`
