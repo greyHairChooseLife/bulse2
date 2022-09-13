@@ -5,6 +5,7 @@ const router = express.Router();
 
 //router.get('', reservationController.getReservationByDate);
 router.post('', reservationController.postReservation);
+router.post('/identity', reservationController.getReservation);
 //router.put('/likeCount', reservationController.updateLikeCount);
 //router.put('', reservationController.updateReservation);
 //router.delete('', reservationController.deleteReservation);

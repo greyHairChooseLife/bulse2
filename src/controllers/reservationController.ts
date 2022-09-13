@@ -2,13 +2,13 @@ import { Request, Response } from 'express'
 import reservationModel from '../models/reservationModel';
 import projectModel from '../models/projectModel';
 
-//const getReservationByDate = async (req: Request, res: Response) => {
-//	const theDay = req.query.theDay;
-//	let result = null;
-//	if(typeof theDay === 'string') result = await reservationModel.getreservationByDate(theDay);
-//	
-//	return res.json(result);
-//}
+const getReservation = async (req: Request, res: Response) => {
+	const filter = {...req.body, ...req.query};
+	let result = null;
+	result = await reservationModel.getReservation(filter);
+
+	return res.json(result);
+}
 
 const postReservation = async (req: Request, res: Response) => {
 	const { theDay, sessionNumber, name, mobileNumber, device } = req.body;
@@ -38,7 +38,7 @@ const postReservation = async (req: Request, res: Response) => {
 //}
 
 export = {
-//	getreservationByDate: getreservationByDate,
+	getReservation: getReservation,
 	postReservation: postReservation,
 //	updateLikeCount: updateLikeCount,
 }
