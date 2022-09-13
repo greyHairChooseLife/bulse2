@@ -22,6 +22,7 @@ const getReservation = async (props: getReservationPropsType) => {
 	return result;
 };
 
+
 interface IpostReservation {
 	projectId: number
 	name: string
@@ -36,7 +37,18 @@ const postReservation = async (props: IpostReservation ) => {
 	return result;
 }
 
+
+interface IdeleteReservation {
+	reservationId: number
+}
+const deleteReservation = async (props: IdeleteReservation) => {
+	const result = await db.query(`DELETE FROM reservation where id=${props.reservationId}`);
+
+	return result;
+}
+
 export = {
 	getReservation: getReservation,
 	postReservation: postReservation,
+	deleteReservation: deleteReservation,
 }

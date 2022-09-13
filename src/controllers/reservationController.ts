@@ -22,9 +22,16 @@ const postReservation = async (req: Request, res: Response) => {
 	return res.json(result);
 }
 
+const deleteReservation = async (req: Request, res: Response) => {
+	const result = await reservationModel.deleteReservation({reservationId: req.body.reservationId});
+
+	return result;
+}
+
 
 export = {
 	getReservation: getReservation,
 	postReservation: postReservation,
+	deleteReservation: deleteReservation,
 }
 
