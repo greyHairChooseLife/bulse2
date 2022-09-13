@@ -3,10 +3,8 @@ import reservationController from '../controllers/reservationController';
 
 const router = express.Router();
 
-//router.get('', reservationController.getReservationByDate);
+router.get('', reservationController.getReservation);
 router.post('', reservationController.postReservation);
-router.post('/identity', reservationController.getReservation);
-//router.put('/likeCount', reservationController.updateLikeCount);
 //router.put('', reservationController.updateReservation);
 //router.delete('', reservationController.deleteReservation);
 

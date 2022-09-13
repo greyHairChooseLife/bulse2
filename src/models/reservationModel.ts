@@ -36,18 +36,7 @@ const postReservation = async (props: IpostReservation ) => {
 	return result;
 }
 
-//type updateLikeCountPropType = {theDay: string, session: number}
-//const updateLikeCount = async ( props: updateLikeCountPropType ) => {
-//
-//	const { theDay, session } = props;
-//
-//	const result = await db.query(`UPDATE reservation SET like_count = like_count+1 WHERE date='${theDay}' AND session=${session}`);
-//
-//	return result;
-//}
-
 export = {
 	getReservation: getReservation,
 	postReservation: postReservation,
-	//updateLikeCount: updateLikeCount,
 }
