@@ -9,6 +9,14 @@ const getProjectByDate = async (req: Request, res: Response) => {
 	return res.json(result);
 }
 
+const getProjectByMonth = async (req: Request, res: Response) => {
+	const theMonth = req.query.theMonth;
+	let result = null;
+	if(typeof theMonth === 'string') result = await projectModel.getProjectByMonth(theMonth);
+	
+	return res.json(result);
+}
+
 const postProject = async (req: Request, res: Response) => {
 	const proposedData = req.body;
 
@@ -32,6 +40,7 @@ const updateLikeCount = async (req: Request, res: Response) => {
 
 export = {
 	getProjectByDate: getProjectByDate,
+	getProjectByMonth: getProjectByMonth,
 	postProject: postProject,
 	updateLikeCount: updateLikeCount,
 }
