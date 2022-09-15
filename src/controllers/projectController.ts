@@ -38,10 +38,17 @@ const updateLikeCount = async (req: Request, res: Response) => {
 	return res.json({updateResult: result, affected: affected});
 }
 
+const updateProjectStatus = async (req: Request, res: Response) => {
+	const result = await projectModel.updateProjectStatus(req.body)
+
+	return res.json(result);
+}
+
 export = {
 	getProjectByDate: getProjectByDate,
 	getProjectByMonth: getProjectByMonth,
 	postProject: postProject,
 	updateLikeCount: updateLikeCount,
+	updateProjectStatus: updateProjectStatus,
 }
 

@@ -115,9 +115,34 @@ const updateLikeCount = async ( props: updateLikeCountPropType ) => {
 	return result;
 }
 
+
+const updateProjectStatus = async (props: {byWhom: string, toDo: string, projectId: number, comment: string}) => {
+	let newStatus: string | undefined = undefined;
+	if(props.byWhom === 'admin'){
+		switch(props.toDo){
+			case 'approve':
+				newStatus = 'recruiting';
+				break;
+			case 'reject':
+				newStatus = 'broken';
+				await db.query(`INSERT INTO broken_project (project_id, executor, broke_on, comment) VALUES(?, ?, ?, ?)`, [props.projectId, props.byWhom, 'pending', props.comment]);
+				break;
+			case 'cancel':
+				newStatus = 'broken';
+				await db.query(`INSERT INTO broken_project (project_id, executor, broke_on, comment) VALUES(?, ?, ?, ?)`, [props.projectId, props.byWhom, 'pending', props.comment]);
+				break;
+		}
+	}
+
+	const result = await db.query(`UPDATE project SET status = '${newStatus}' WHERE id='${props.projectId}'`);
+
+	return result;
+}
+
 export = {
 	getProjectByDate: getProjectByDate,
 	getProjectByMonth: getProjectByMonth,
 	postProject: postProject,
 	updateLikeCount: updateLikeCount,
+	updateProjectStatus: updateProjectStatus,
 }

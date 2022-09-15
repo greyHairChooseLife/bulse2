@@ -7,6 +7,7 @@ router.get('/date', projectController.getProjectByDate);
 router.get('/month', projectController.getProjectByMonth);
 router.post('', projectController.postProject);
 router.put('/likeCount', projectController.updateLikeCount);
+router.put('/status', projectController.updateProjectStatus);
 //router.put('', projectController.updateProject);
 //router.delete('', projectController.deleteProject);
 
