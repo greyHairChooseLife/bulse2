@@ -37,6 +37,16 @@ const postReservation = async (props: IpostReservation ) => {
 	return result;
 }
 
+const updateReservation = async (RID: number, toDo: {payment: boolean}) => {
+	let result;
+	if(toDo.payment) result = await db.query(`UPDATE reservation SET payment = true WHERE id=${RID}`);
+}
+
+const askCheckPayment = async (RID: number, cancel: boolean) => {
+	let result;
+	if(cancel) result = await db.query(`UPDATE reservation SET check_payment = NULL WHERE id=${RID}`);
+	else result = await db.query(`UPDATE reservation SET check_payment = '${new Date().toString()}' WHERE id=${RID}`);
+}
 
 interface IdeleteReservation {
 	reservationId: number
@@ -50,5 +60,7 @@ const deleteReservation = async (props: IdeleteReservation) => {
 export = {
 	getReservation: getReservation,
 	postReservation: postReservation,
+	updateReservation: updateReservation,
+	askCheckPayment: askCheckPayment,
 	deleteReservation: deleteReservation,
 }

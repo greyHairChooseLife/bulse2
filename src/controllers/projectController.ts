@@ -17,6 +17,15 @@ const getProjectByMonth = async (req: Request, res: Response) => {
 	return res.json(result);
 }
 
+const getUserRecord = async (req: Request, res: Response) => {
+	const when = req.query.when;
+	const who = req.query.who;
+	let result = null;
+	if(typeof when === 'string') result = await projectModel.getUserRecord(when, who);
+
+	return res.json(result);
+}
+
 const postProject = async (req: Request, res: Response) => {
 	const proposedData = req.body;
 
@@ -47,6 +56,7 @@ const updateProjectStatus = async (req: Request, res: Response) => {
 export = {
 	getProjectByDate: getProjectByDate,
 	getProjectByMonth: getProjectByMonth,
+	getUserRecord: getUserRecord,
 	postProject: postProject,
 	updateLikeCount: updateLikeCount,
 	updateProjectStatus: updateProjectStatus,

@@ -43,6 +43,7 @@ const getProjectByMonth = async (theMonth: string) => {
 		r.id as R_id,
 		r.device as R_device,
 		r.payment as R_payment,
+		r.check_payment as R_checkPayment,
 		r.name as R_name,
 		r.mobile_number as R_mobileNumber
 
@@ -67,6 +68,7 @@ const getProjectByMonth = async (theMonth: string) => {
 				id: ele.R_id,
 				device: ele.R_device,
 				payment: ele.R_payment,
+				check_payment: ele.R_checkPayment,
 				name: ele.R_name,
 				mobileNumber: ele.R_mobileNumber,
 			}]
@@ -76,6 +78,7 @@ const getProjectByMonth = async (theMonth: string) => {
 				id: ele.R_id,
 				device: ele.R_device,
 				payment: ele.R_payment,
+				check_payment: ele.R_checkPayment,
 				name: ele.R_name,
 				mobileNumber: ele.R_mobileNumber,
 			}]});
@@ -89,6 +92,44 @@ const getProjectByMonth = async (theMonth: string) => {
 };
 
 
+const getUserRecord = async (when: string, who: any) => {
+	const name = who.split('"')[3];
+	const mobileNumber = who.split('"')[7];
+	
+	//	user가 제안한 모든 프로젝트(금년)
+	const [proposal] = await db.query(`SELECT * FROM project WHERE date_format(date, '%Y') = '${when}' AND name='${name}' AND mobile_number='${mobileNumber}'`);
+	//	user가 예약한 모든 프로젝트(금년, broken project 포함)
+	const [reservation] = await db.query(`SELECT 
+		p.date as P_date,
+		p.session as P_session,
+		p.id as P_id,
+		p.name as P_name,
+		p.mobile_number as P_mobileNumber,
+		p.subject as P_subject,
+		p.content as P_content,
+		p.status as P_status,
+		p.expose_count as P_exposeCount,
+		p.like_count as P_likeCount,
+
+		r.id as R_id,
+		r.device as R_device,
+		r.payment as R_payment,
+		r.check_payment as R_checkPayment,
+		r.name as R_name,
+		r.mobile_number as R_mobileNumber
+
+		FROM reservation AS r LEFT OUTER JOIN project AS p ON p.id = r.project_id WHERE r.name='${name}' AND r.mobile_number='${mobileNumber}' AND DATE_FORMAT(p.date, '%Y')='${when}'`);
+
+	return {proposal: proposal.sort((a: any, b: any) => {
+		if(a.date - b.date !== 0) return a.date - b.date
+		else return a.session - b.session
+	}), reservation: reservation.sort((a: any, b: any) => {
+		if(a.P_date - b.P_date !== 0) return a.P_date - b.P_date
+		else return a.P_session - b.P_session
+	})};
+};
+
+
 interface InewProject {
 	identity: {name: string, mobileNumber: string},
 	subject: string,
@@ -96,7 +137,6 @@ interface InewProject {
 	theDay: Date,
 	session: number,
 }
-
 const postProject = async (proposedData: InewProject ) => {
 	const {identity, subject, content, theDay, session} = proposedData; 
 
@@ -107,7 +147,6 @@ const postProject = async (proposedData: InewProject ) => {
 
 type updateLikeCountPropType = {theDay: string, session: number}
 const updateLikeCount = async ( props: updateLikeCountPropType ) => {
-
 	const { theDay, session } = props;
 
 	const result = await db.query(`UPDATE project SET like_count = like_count+1 WHERE date='${theDay}' AND session=${session}`);
@@ -142,6 +181,7 @@ const updateProjectStatus = async (props: {byWhom: string, toDo: string, project
 export = {
 	getProjectByDate: getProjectByDate,
 	getProjectByMonth: getProjectByMonth,
+	getUserRecord: getUserRecord,
 	postProject: postProject,
 	updateLikeCount: updateLikeCount,
 	updateProjectStatus: updateProjectStatus,
