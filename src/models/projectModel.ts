@@ -96,8 +96,9 @@ const getUserRecord = async (when: string, who: any) => {
 	const name = who.split('"')[3];
 	const mobileNumber = who.split('"')[7];
 	
+	//const [proposal] = await db.query(`SELECT * FROM project WHERE date_format(date, '%Y') = '${when}' AND name='${name}' AND mobile_number='${mobileNumber}'`);
 	//	user가 제안한 모든 프로젝트(금년)
-	const [proposal] = await db.query(`SELECT * FROM project WHERE date_format(date, '%Y') = '${when}' AND name='${name}' AND mobile_number='${mobileNumber}'`);
+	const [proposal] = await db.query(`SELECT * FROM project LEFT OUTER JOIN broken_project AS bp ON project.id = bp.project_id WHERE date_format(date, '%Y') = '${when}' AND name='${name}' AND mobile_number='${mobileNumber}'`);
 	//	user가 예약한 모든 프로젝트(금년, broken project 포함)
 	const [reservation] = await db.query(`SELECT 
 		p.date as P_date,
@@ -178,6 +179,13 @@ const updateProjectStatus = async (props: {byWhom: string, toDo: string, project
 	return result;
 }
 
+const deleteProject = async (projectId: number, projectStatus: string) => {
+	const result = await db.query(`UPDATE project SET status = 'broken' WHERE id=${projectId}`);
+	await db.query(`INSERT INTO broken_project (project_id, executor, broke_on, comment) VALUES(?, ?, ?, ?)`, [projectId, 'proponent', projectStatus, 'self break']);
+
+	return result;
+}
+
 export = {
 	getProjectByDate: getProjectByDate,
 	getProjectByMonth: getProjectByMonth,
@@ -185,4 +193,5 @@ export = {
 	postProject: postProject,
 	updateLikeCount: updateLikeCount,
 	updateProjectStatus: updateProjectStatus,
+	deleteProject: deleteProject,
 }

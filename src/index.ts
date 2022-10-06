@@ -6,7 +6,7 @@ import methodOverride from 'method-override';
 
 import projectRouter from './routers/projectRouter';
 import reservationRouter from './routers/reservationRouter';
-//import adminRouter from './routers/adminRouter';
+import adminRouter from './routers/adminRouter';
 
 const app = express();
 
@@ -20,12 +20,11 @@ app.use(express.json({limit: '1mb'}));
 app.use(cors()); 		//enble pre-flight
 app.use(methodOverride('_method'));
 
-//app.use('/admin', adminRouter);
-
 app.get('/', (req: Request, res: Response) => {
 	res.send('this is bulse version.2 backend server home page!!');
 });
 
+app.use('/admin', adminRouter);
 app.use('/project', projectRouter);
 app.use('/reservation', reservationRouter);
 

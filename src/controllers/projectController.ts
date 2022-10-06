@@ -53,6 +53,12 @@ const updateProjectStatus = async (req: Request, res: Response) => {
 	return res.json(result);
 }
 
+const deleteProject = async (req: Request, res: Response) => {
+	const result = await projectModel.deleteProject(req.body.projectId, req.body.projectStatus)
+
+	return res.json(result);
+}
+
 export = {
 	getProjectByDate: getProjectByDate,
 	getProjectByMonth: getProjectByMonth,
@@ -60,5 +66,6 @@ export = {
 	postProject: postProject,
 	updateLikeCount: updateLikeCount,
 	updateProjectStatus: updateProjectStatus,
+	deleteProject: deleteProject,
 }
 
