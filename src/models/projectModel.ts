@@ -47,7 +47,8 @@ const getProjectByMonth = async (theMonth: string) => {
 		r.name as R_name,
 		r.mobile_number as R_mobileNumber
 
-		FROM project AS p LEFT OUTER JOIN reservation AS r ON p.id = r.project_id WHERE DATE_FORMAT(p.date, '%m')='${theMonth}' AND NOT status LIKE 'bro%'`);
+		FROM project AS p LEFT OUTER JOIN reservation AS r ON p.id = r.project_id WHERE DATE_FORMAT(p.date, '%m')='${theMonth}'`);
+		//FROM project AS p LEFT OUTER JOIN reservation AS r ON p.id = r.project_id WHERE DATE_FORMAT(p.date, '%m')='${theMonth}' AND NOT status LIKE 'bro%'`);
 
 	const filtered: any[] = [];
 	result.forEach((ele: any) => {
