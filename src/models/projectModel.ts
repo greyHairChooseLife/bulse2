@@ -98,7 +98,7 @@ const getUserRecord = async (when: string, who: any) => {
 	
 	//const [proposal] = await db.query(`SELECT * FROM project WHERE date_format(date, '%Y') = '${when}' AND name='${name}' AND mobile_number='${mobileNumber}'`);
 	//	user가 제안한 모든 프로젝트(금년)
-	const [proposal] = await db.query(`SELECT * FROM project LEFT OUTER JOIN broken_project AS bp ON project.id = bp.project_id WHERE date_format(date, '%Y') = '${when}' AND name='${name}' AND mobile_number='${mobileNumber}'`);
+	const [proposal] = await db.query(`SELECT *, project.id AS id, bp.id as bp_id FROM project LEFT OUTER JOIN broken_project AS bp ON project.id = bp.project_id WHERE date_format(date, '%Y') = '${when}' AND name='${name}' AND mobile_number='${mobileNumber}'`);
 	//	user가 예약한 모든 프로젝트(금년, broken project 포함)
 	const [reservation] = await db.query(`SELECT 
 		p.date as P_date,
