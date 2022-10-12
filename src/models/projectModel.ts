@@ -85,11 +85,23 @@ const getProjectByMonth = async (theMonth: string) => {
 			}]});
 		}
 	})
-	//console.log('sex: ', filtered, filtered.length, 'and... ', filtered[0].reservation.length, '/', filtered[1].reservation.length, '/', filtered[2].reservation.length, '/', filtered[3].reservation.length, '/');
-	return filtered.sort((a, b) => {
+	//console.log('xxxxx: ', filtered, filtered.length, 'and... ', filtered[0].reservation.length, '/', filtered[1].reservation.length, '/', filtered[2].reservation.length, '/', filtered[3].reservation.length, '/');
+	const ProjectAndReservation = filtered.sort((a, b) => {
 		if(a.project.date-b.project.date !== 0) return a.project.date-b.project.date
 		else return a.project.session-b.project.session
 	})
+
+	const [result2] = await db.query(`SELECT
+		p.id as projectId,
+		bp.executor as executor,
+		bp.broke_on as brokeOn,
+		bp.comment as comment
+
+		FROM project AS p LEFT OUTER JOIN broken_project AS bp ON p.id = bp.project_id WHERE DATE_FORMAT(p.date, '%m')='${theMonth}' AND p.status LIKE 'bro%'`);
+
+	const ProjectAndBrokenProject = result2;
+	
+	return {PnR: ProjectAndReservation, PnBP: ProjectAndBrokenProject}
 };
 
 
@@ -157,12 +169,15 @@ const updateLikeCount = async ( props: updateLikeCountPropType ) => {
 }
 
 
-const updateProjectStatus = async (props: {byWhom: string, toDo: string, projectId: number, comment: string}) => {
+const updateProjectStatus = async (props: {byWhom: string, toDo: string, projectId: number, projectStatus: string, comment: string}) => {
 	let newStatus: string | undefined = undefined;
 	if(props.byWhom === 'admin'){
 		switch(props.toDo){
 			case 'approve':
 				newStatus = 'recruiting';
+				break;
+			case 'confirm':
+				newStatus = 'confirmed';
 				break;
 			case 'reject':
 				newStatus = 'broken';
@@ -170,7 +185,7 @@ const updateProjectStatus = async (props: {byWhom: string, toDo: string, project
 				break;
 			case 'cancel':
 				newStatus = 'broken';
-				await db.query(`INSERT INTO broken_project (project_id, executor, broke_on, comment) VALUES(?, ?, ?, ?)`, [props.projectId, props.byWhom, 'pending', props.comment]);
+				await db.query(`INSERT INTO broken_project (project_id, executor, broke_on, comment) VALUES(?, ?, ?, ?)`, [props.projectId, props.byWhom, props.projectStatus, props.comment]);
 				break;
 		}
 	}
